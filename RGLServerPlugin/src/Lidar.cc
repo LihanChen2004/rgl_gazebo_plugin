@@ -321,7 +321,8 @@ ignition::msgs::PointCloudPacked RGLServerPluginInstance::CreatePointCloudMsg(st
     ignition::msgs::PointCloudPacked outMsg;
     ignition::msgs::InitPointCloudPacked(outMsg, frame, false,
                                          {{"xyz", ignition::msgs::PointCloudPacked::Field::FLOAT32},
-                                          {"intensity",ignition::msgs::PointCloudPacked::Field::FLOAT32}});
+                                          {"intensity",ignition::msgs::PointCloudPacked::Field::FLOAT32},
+                                          {"timestamp", gz::msgs::PointCloudPacked::Field::UINT32}});
     outMsg.mutable_data()->resize(resultPointCloud.hitPointCount * outMsg.point_step());
     *outMsg.mutable_header()->mutable_stamp() = ignition::msgs::Convert(simTime);
     outMsg.set_height(1);

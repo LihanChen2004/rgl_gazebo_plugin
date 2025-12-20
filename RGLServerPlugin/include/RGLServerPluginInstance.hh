@@ -91,10 +91,11 @@ private:
     {
         std::vector<char> data{};
         int32_t hitPointCount{};
-        static constexpr std::size_t pointSize{sizeof(rgl_vec3f) + sizeof(float)};  // Based on rglFields
+        static constexpr std::size_t pointSize{sizeof(rgl_vec3f) + sizeof(float) + sizeof(uint32_t)};  // xyz + intensity + timestamp
         inline static const std::vector<rgl_field_t> rglFields = {
                 RGL_FIELD_XYZ_VEC3_F32,
-                RGL_FIELD_LASER_RETRO_F32
+                RGL_FIELD_LASER_RETRO_F32,
+                RGL_FIELD_TIME_STAMP_U32
         };
     } resultPointCloud{};
 
@@ -105,7 +106,8 @@ private:
         // No hitPointCount needed because LaserScan message contains non-hits also
         inline static const std::vector<rgl_field_t> rglFields = {
             RGL_FIELD_DISTANCE_F32,
-            RGL_FIELD_LASER_RETRO_F32
+            RGL_FIELD_LASER_RETRO_F32,
+            RGL_FIELD_TIME_STAMP_U32
         };
     } resultLaserScan{};
 
