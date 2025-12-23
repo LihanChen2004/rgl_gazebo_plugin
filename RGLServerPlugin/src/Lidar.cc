@@ -234,6 +234,13 @@ void RGLServerPluginInstance::RayTrace(std::chrono::steady_clock::duration simTi
 
     lastRaytraceTime = simTime;
 
+    // Set scene time for RGL to enable TIME_STAMP_F64 field
+    uint64_t simTimeNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(simTime).count();
+    if (!CheckRGL(rgl_scene_set_time(nullptr, simTimeNanoseconds))) {
+        ignerr << "Failed to set scene time.\n";
+        return;
+    }
+
     if (!CheckRGL(rgl_graph_run(rglNodeRaytrace))) {
         ignerr << "Failed to perform raytrace.\n";
         return;
@@ -322,7 +329,7 @@ ignition::msgs::PointCloudPacked RGLServerPluginInstance::CreatePointCloudMsg(st
     ignition::msgs::InitPointCloudPacked(outMsg, frame, false,
                                          {{"xyz", ignition::msgs::PointCloudPacked::Field::FLOAT32},
                                           {"intensity",ignition::msgs::PointCloudPacked::Field::FLOAT32},
-                                          {"timestamp", gz::msgs::PointCloudPacked::Field::UINT32}});
+                                          {"timestamp", gz::msgs::PointCloudPacked::Field::FLOAT64}});
     outMsg.mutable_data()->resize(resultPointCloud.hitPointCount * outMsg.point_step());
     *outMsg.mutable_header()->mutable_stamp() = ignition::msgs::Convert(simTime);
     outMsg.set_height(1);
